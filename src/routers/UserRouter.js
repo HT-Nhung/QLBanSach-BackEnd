@@ -11,5 +11,6 @@ router.delete('/delete-user/:id', authMiddleWare, userController.deleteUser)//X�
 router.get('/getAll', authMiddleWare, userController.getAllUser)//Hiển thị dữ liệu
 router.get('/get-details/:id', authUserMiddleWare, userController.getDetailsUser)//Hiển thị dữ liệu
 router.post('/refresh-token', userController.refreshToken)
+router.post('/delete-many', authMiddleWare, userController.deleteMany)
 
 module.exports = router

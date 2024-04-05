@@ -2,7 +2,7 @@ const Product = require("../models/ProductModel")
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, type, countInStock, price, rating, description } = newProduct
+        const { name, image, type, countInStock, price, rating, description, discount } = newProduct
         try {
             const checkProduct = await Product.findOne({
                 name: name
@@ -14,7 +14,7 @@ const createProduct = (newProduct) => {
                 })
             }
             const newProduct = await Product.create({
-                name, image, type, countInStock, price, rating, description
+                name, image, type, countInStock, price, rating, description, discount
             })
             if (newProduct) {
                 resolve({
@@ -38,7 +38,7 @@ const updateProduct = (id, data) => {
             if (checkProduct === null) {
                 resolve({
                     status: 'OK',
-                    massge: 'Người dùng không tồn tại'
+                    massge: 'Sản phẩm không tồn tại'
                 })
             }
 
@@ -80,6 +80,21 @@ const deleteProduct = (id) => {
     })
 }
 
+const deleteManyProduct = (ids) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await Product.deleteMany({ _id: ids })
+            resolve({
+                status: 'OK',
+                message: 'Xóa dữ liệu thành công',
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 const getDetailsProduct = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -108,6 +123,7 @@ const getAllProduct = (limit, page, sort, filter) => { //limit(sản phẩm củ
     return new Promise(async (resolve, reject) => {
         try {
             const totalProduct = await Product.count()
+            let allProduct = []
             if (filter) {
                 const label = filter[0]
                 const allObjectFilter = await Product.find({ [label]: { '$regex': filter[1] } }).limit(limit).skip(page * limit)
@@ -133,7 +149,11 @@ const getAllProduct = (limit, page, sort, filter) => { //limit(sản phẩm củ
                     totalPage: Math.ceil(totalProduct / limit)
                 })
             }
-            const allProduct = await Product.find().limit(limit).skip(page * limit)
+            if (!limit) {
+                allProduct = await Product.find()
+            } else {
+                allProduct = await Product.find().limit(limit).skip(page * limit)
+            }
             //const allProduct = await Product.find().skip(2) //Ẩn 2 dữ liệu đầu trong DB
             //const allProduct = await Product.find().limit(limit) //Lấy 2 dữ liệu DB bất kì
             resolve({
@@ -151,10 +171,29 @@ const getAllProduct = (limit, page, sort, filter) => { //limit(sản phẩm củ
     })
 }
 
+const getAllType = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const allType = await Product.distinct('type')
+            resolve({
+                status: 'OK',
+                message: 'Hiển thị dữ liệu thành công',
+                data: allType,
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+
 module.exports = {
     createProduct,
     updateProduct,
     getDetailsProduct,
     deleteProduct,
-    getAllProduct
+    getAllProduct,
+    deleteManyProduct,
+    getAllType
 }
