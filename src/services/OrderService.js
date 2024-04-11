@@ -66,12 +66,12 @@ const createOrder = (newOrder) => {
 const getOrderDetails = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const order = await Order.findOne({
-                user: id
+            const order = await Order.findById({
+                _id: id
             })
             if (order === null) {
                 resolve({
-                    status: 'OK',
+                    status: 'ERR',
                     massge: 'Sản phẩm không tồn tại'
                 })
             }
@@ -87,7 +87,56 @@ const getOrderDetails = (id) => {
     })
 }
 
+const getAllOrderDetails = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.find({
+                user: id
+            }).sort({ createdAt: -1, updatedAt: -1 })
+            if (order === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'The order is not defined'
+                })
+            }
+
+            resolve({
+                status: 'OK',
+                message: 'SUCESSS',
+                data: order
+            })
+        } catch (e) {
+            // console.log('e', e)
+            reject(e)
+        }
+    })
+}
+
+const cancelOrderDetails = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.findByIdAndDelete(id)
+            if (order === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'Không tồn tại'
+                })
+            }
+            resolve({
+                status: 'OK',
+                message: 'Thành công',
+                data: order
+            })
+        } catch (e) {
+            onclose.log('e', e)
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     createOrder,
-    getOrderDetails
+    getOrderDetails,
+    getAllOrderDetails,
+    cancelOrderDetails
 }
