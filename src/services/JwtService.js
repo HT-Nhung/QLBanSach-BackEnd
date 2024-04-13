@@ -25,7 +25,7 @@ const refreshTokenJwtService = (token) => {
                 if (err) {
                     resolve({
                         status: 'ERR',
-                        message: 'Xác thực',
+                        message: 'Lỗi xác thực',
                     })
                 }
                 const access_token = await genneralAccessToken({
