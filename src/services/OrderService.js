@@ -1,11 +1,12 @@
 const Order = require("../models/OrderModel")
 const Product = require("../models/ProductModel")
+const EmailService = require("../services/EmailService")
 
 const createOrder = (newOrder) => {
     return new Promise(async (resolve, reject) => {
-        const { orderItems, paymentMethod, itemsPrice, shippingPrice, totalPrice, fullName, address, city, phone, user, isPaid, paidAt } = newOrder
+        const { orderItems, paymentMethod, itemsPrice, shippingPrice, totalPrice,
+            fullName, address, city, phone, user, isPaid, paidAt, email } = newOrder
         try {
-            //console.log('orderItems', { orderItems })
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate({
                     _id: order.product,
@@ -32,6 +33,7 @@ const createOrder = (newOrder) => {
                         isPaid, paidAt
                     })
                     if (createdOrder) {
+                        await EmailService.sendEmailCreateOrder(email, orderItems)
                         return ({
                             status: 'OK',
                             message: 'Thành công'
