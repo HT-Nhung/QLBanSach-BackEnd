@@ -20,24 +20,10 @@ const createOrder = (newOrder) => {
                     },
                     { new: true }
                 )
-                //console.log('productData', productData)
                 if (productData) {
-                    const createdOrder = await Order.create({
-                        orderItems,
-                        shippingAddress: {
-                            fullName, address, city, phone
-                        },
-                        paymentMethod,
-                        itemsPrice, shippingPrice, totalPrice,
-                        user: user,
-                        isPaid, paidAt
-                    })
-                    if (createdOrder) {
-                        await EmailService.sendEmailCreateOrder(email, orderItems)
-                        return ({
-                            status: 'OK',
-                            message: 'Thành công'
-                        })
+                    return {
+                        status: 'OK',
+                        message: 'Thành công'
                     }
                 } else {
                     return ({
@@ -48,19 +34,36 @@ const createOrder = (newOrder) => {
                 }
             })
             const results = await Promise.all(promises)
-            const newData = results && results.filter((item) => item.id)
+            const newData = results && results.filter((item) => item.id || null)
             if (newData.length) {
+                const arrId = []
+                newData.forEach((item) => {
+                    arrId.push(item.id)
+                })
                 resolve({
                     status: 'ERR',
-                    message: `Sách với id${newData.join(',')} không đủ`
+                    message: `Sách với id: ${newData.join(',')} không đủ`
                 })
+            } else {
+                const createdOrder = await Order.create({
+                    orderItems,
+                    shippingAddress: {
+                        fullName, address, city, phone
+                    },
+                    paymentMethod,
+                    itemsPrice, shippingPrice, totalPrice,
+                    user: user,
+                    isPaid, paidAt
+                })
+                if (createdOrder) {
+                    await EmailService.sendEmailCreateOrder(email, orderItems)
+                    resolve({
+                        status: 'OK',
+                        message: 'Thành công'
+                    })
+                }
             }
-            resolve({
-                status: 'OK',
-                message: 'Thành công'
-            })
         } catch (e) {
-            console.log('e', e)
             reject(e)
         }
     })
@@ -109,7 +112,6 @@ const getAllOrderDetails = (id) => {
                 data: order
             })
         } catch (e) {
-            // console.log('e', e)
             reject(e)
         }
     })
@@ -169,9 +171,26 @@ const cancelOrderDetails = (id, data) => {
     })
 }
 
+const getAllOrder = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const allOrder = await Order.find()
+            resolve({
+                status: 'OK',
+                message: 'Hiển thị dữ liệu thành công',
+                data: allOrder
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     createOrder,
     getOrderDetails,
     getAllOrderDetails,
-    cancelOrderDetails
+    cancelOrderDetails,
+    getAllOrder
 }
