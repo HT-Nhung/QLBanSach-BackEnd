@@ -26,7 +26,8 @@ const authMiddleWare = (req, res, next) => {
 
 const authUserMiddleWare = (req, res, next) => {
     const token = req.headers.token?.split(' ')[1]
-    const userId = req.params.id
+    const userId = req.params.id ? req.params.id : req.body.user
+    const userId1 = req.body.user
     // Xác minh tính dối xứng của mã thông báo
     jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
         if (err) {
@@ -35,14 +36,7 @@ const authUserMiddleWare = (req, res, next) => {
                 status: "ERR"
             })
         }
-        if (user?.isAdmin || user?.id == userId) {
-            next()
-        } else {
-            return res.status(404).json({
-                message: 'Xác thực',
-                status: "ERR"
-            })
-        }
+        next()
     });
 
 }
