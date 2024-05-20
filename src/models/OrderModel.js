@@ -28,7 +28,11 @@ const orderSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, //Lấy thông tin người mua từ bảng user
     isPaid: { type: Boolean, default: false }, //Trạng thái thanh toán
     paidAt: { type: Date }, //Thời thanh toán
-    isDelivered: { type: Boolean, default: false }, //Trạng thái đơn hàng
+    isDelivered: {//Trạng thái đơn hàng
+        type: String,
+        enum: ['Chờ xác nhận', 'Đã xác nhận', 'Đang giao', 'Đã giao', 'Đã hủy'],
+        default: 'Chờ xác nhận'
+    },
     deliveredAt: { type: Date },// thời gian đặt hàng
 },
     {

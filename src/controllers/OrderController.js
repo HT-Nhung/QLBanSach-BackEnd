@@ -85,10 +85,49 @@ const getAllOrder = async (req, res) => {
     }
 }
 
+const updateOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id
+        const { newStatus } = req.body;
+        if (!orderId || !newStatus) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'Thiếu id đơn hàng và trạng thái'
+            })
+        }
+        const response = await OrderService.updateOrderStatus(orderId, newStatus);
+        return res.status(200).json(response);
+    } catch (e) {
+        return res.status(500).json({
+            message: e.message || 'Đã xảy ra lỗi khi cập nhật trạng thái đơn hàng'
+        })
+    }
+}
+
+const deleteMany = async (req, res) => {
+    try {
+        const ids = req.body.ids
+        if (!ids) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'Id là bắt buộc'
+            })
+        }
+        const response = await OrderService.deleteManyOrder(ids)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
 module.exports = {
     createOrder,
     getDetailsOrder,
     getAllOrderDetails,
     cancelOrderDetails,
-    getAllOrder
+    getAllOrder,
+    updateOrder,
+    deleteMany
 }

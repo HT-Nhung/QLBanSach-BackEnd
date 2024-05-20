@@ -2,8 +2,8 @@ const ProductService = require('../services/ProductService')
 
 const createProduct = async (req, res) => {
     try {
-        const { name, image, type, countInStock, price, rating, description, discount } = req.body
-        if (!name || !image || !type || !countInStock || !price || !rating || !discount) {
+        const { productCode, name, author, publish, publishYear, episode, image, type, countInStock, price, rating, description, discount } = req.body
+        if (!productCode || !name || !author || !publish || !publishYear || !image || !type || !countInStock || !price || !rating || !discount) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'Dữ liệu không hợp lệ'

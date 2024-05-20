@@ -187,10 +187,45 @@ const getAllOrder = () => {
     })
 }
 
+const updateOrderStatus = async (id, newStatus) => {
+    try {
+        const order = await Order.findByIdAndUpdate(id, { isDelivered: newStatus }, { new: true });
+        if (!order) {
+            return {
+                status: 'ERR',
+                message: 'Không tìm thấy đơn hàng'
+            };
+        }
+        return {
+            status: 'OK',
+            message: 'Thay đổi trạng thái đơn hàng thành công',
+            data: order
+        };
+    } catch (error) {
+        throw new Error('Đã xảy ra lỗi khi cập nhật trạng thái đơn hàng');
+    }
+};
+const deleteManyOrder = (ids) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await Order.deleteMany({ _id: ids })
+            resolve({
+                status: 'OK',
+                message: 'Xóa dữ liệu thành công',
+            })
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     createOrder,
     getOrderDetails,
     getAllOrderDetails,
     cancelOrderDetails,
-    getAllOrder
+    getAllOrder,
+    updateOrderStatus,
+    deleteManyOrder
 }

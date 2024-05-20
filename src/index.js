@@ -19,6 +19,7 @@ app.use(cookieParser())
 
 routes(app);
 
+//Câu lệnh liên kết mongoDB
 mongoose.connect(`${process.env.MONGO_DB}`)
     .then(() => {
         console.log('Kết nối DB thành công')

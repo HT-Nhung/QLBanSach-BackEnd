@@ -2,19 +2,24 @@ const Product = require("../models/ProductModel")
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const { name, image, type, countInStock, price, rating, description, discount } = newProduct
+        const { productCode, name, author, publish, publishYear, episode, image, type, countInStock, price, rating, description, discount } = newProduct
         try {
             const checkProduct = await Product.findOne({
-                name: name
+                productCode: productCode
             })
             if (checkProduct !== null) {
                 resolve({
-                    status: 'OK',
-                    massge: 'Tên sản phẩm đã tồn tại'
+                    //status: 'OK',
+                    err: 1,
+                    massge: 'Sản phẩm đã tồn tại'
                 })
             }
             const newProduct = await Product.create({
-                name, image, type, countInStock: Number(countInStock),
+                productCode, name, author,
+                publish,
+                publishYear: Number(publishYear),
+                episode,
+                image, type, countInStock: Number(countInStock),
                 price, rating, description, discount: Number(discount)
             })
             if (newProduct) {
