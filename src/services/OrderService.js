@@ -56,11 +56,19 @@ const createOrder = (newOrder) => {
                     isPaid, paidAt
                 })
                 if (createdOrder) {
-                    await EmailService.sendEmailCreateOrder(email, orderItems)
-                    resolve({
-                        status: 'OK',
-                        message: 'Thành công'
-                    })
+                    try {
+                        //await EmailService.sendEmailCreateOrder(email, orderItems);
+                        resolve({
+                            status: 'OK',
+                            message: 'Thành công'
+                        });
+                    } catch (emailError) {
+                        // Xử lý ngoại lệ gửi email nhưng đơn hàng vẫn được tạo
+                        resolve({
+                            status: 'OK',
+                            message: 'Thành công nhưng không gửi được email'
+                        });
+                    }
                 }
             }
         } catch (e) {
@@ -68,7 +76,6 @@ const createOrder = (newOrder) => {
         }
     })
 }
-
 const getOrderDetails = (id) => {
     return new Promise(async (resolve, reject) => {
         try {

@@ -8,11 +8,11 @@ const productSchema = new mongoose.Schema(
         publish: { type: String },//Nhà xuất bản
         publishYear: { type: Number },//Năm xuất bản
         episode: { type: String },//Tập
-        image: { type: String, required: true },
+        images: { type: [String], required: true },
         type: { type: String, required: true }, // thể loại
         price: { type: Number, required: true },//giá
         countInStock: { type: Number, required: true }, // số lượng kho
-        rating: { type: Number, required: true }, //đánh giá sao
+        //rating: { type: Number, required: true }, //đánh giá sao
         description: { type: String }, //mô tả
         discount: { type: Number }, //giảm giá
         selled: { type: Number } //số lượng sách đã bán

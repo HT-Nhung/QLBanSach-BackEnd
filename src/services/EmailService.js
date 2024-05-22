@@ -20,7 +20,7 @@ const sendEmailCreateOrder = async (email, orderItems) => {
         <div>Bạn đã đặt sách <b>${order.name}</b> với số lượng: <b>${order.amount}</b> với đơn giá là: <b>${order.price} VND</b></div>
         <div>Bên dưới là hình ảnh của sản phẩm</div>
         </div>`
-        attachImage.push({ path: order.image })
+        attachImage.push({ path: order.images[0] })
     })
 
     let info = await transporter.sendMail({

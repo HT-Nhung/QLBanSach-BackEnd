@@ -5,7 +5,7 @@ const orderSchema = new mongoose.Schema({
         {
             name: { type: String, required: true }, // tên sách 
             amount: { type: Number, required: true }, // số lượng
-            image: { type: String, required: true },
+            images: { type: [String], required: true },
             price: { type: Number, required: true }, // giá
             discount: { type: Number }, // giảm giá
             product: { // lấy id của sản phẩm từ bảng Product
