@@ -12,7 +12,8 @@ const productSchema = new mongoose.Schema(
         type: { type: String, required: true }, // thể loại
         price: { type: Number, required: true },//giá
         countInStock: { type: Number, required: true }, // số lượng kho
-        //rating: { type: Number, required: true }, //đánh giá sao
+        averageRating: { type: Number, default: 0 }, // Đánh giá trung bình sao
+        ratings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }], // Danh sách đánh giá
         description: { type: String }, //mô tả
         discount: { type: Number }, //giảm giá
         selled: { type: Number } //số lượng sách đã bán
