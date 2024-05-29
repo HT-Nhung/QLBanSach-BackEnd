@@ -8,10 +8,10 @@ const userSchema = new mongoose.Schema(
         phone: { type: String },
         address: { type: String },
         avatar: { type: String },
-        city: { type: String },
+        //city: { type: String },
         role: {//phân quyền, vai trò
             type: String,
-            enum: ['admin', 'Quản lý', 'Khách hàng'],
+            enum: ['AdminSuper', 'Admin', 'Khách hàng'],
             default: 'Khách hàng'
         },
     },

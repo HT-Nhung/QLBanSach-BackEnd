@@ -10,5 +10,6 @@ router.get('/get-all', ProductController.getAllProduct)//Hiển thị tất cả
 router.get('/get-details/:id', ProductController.getDetailsProduct)//Hiển thị chi tiết sản phẩm
 router.post('/delete-many', authMiddleWare, ProductController.deleteMany)// Xóa nhiều sản phẩm
 router.get('/get-all-type', ProductController.getAllType)
+router.get('/get-product-by-category', ProductController.getAllProductsByCategoryIds)
 
 module.exports = router

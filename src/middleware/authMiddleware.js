@@ -12,7 +12,7 @@ const authMiddleWare = (req, res, next) => {
                 status: "ERR"
             })
         }
-        if (user?.role === "admin" || user?.role === "Quản lý") {
+        if (user?.role === "AdminSuper" || user?.role === "Admin") {
             next()
         } else {
             return res.status(404).json({

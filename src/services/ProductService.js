@@ -2,7 +2,7 @@ const Product = require("../models/ProductModel")
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const { productCode, name, author, publish, publishYear, episode, images, type, countInStock, price, description, discount } = newProduct
+        const { productCode, name, author, publish, publishYear, episode, images, countInStock, categoryIds, price, description, discount } = newProduct
         try {
             const checkProduct = await Product.findOne({
                 productCode: productCode
@@ -19,7 +19,7 @@ const createProduct = (newProduct) => {
                 publish,
                 publishYear: Number(publishYear),
                 episode,
-                images, type, countInStock: Number(countInStock),
+                images, categoryIds, countInStock: Number(countInStock),
                 price, description, discount: Number(discount)
             })
             if (newProduct) {
@@ -193,6 +193,29 @@ const getAllType = () => {
     })
 }
 
+const getAllProductsByCategoryIds = (limit, page, categoryIds) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const totalProduct = await Product.countDocuments({ categoryIds: { $all: categoryIds } });
+            const products = await Product.find({ categoryIds: { $all: categoryIds } })
+                .limit(limit)
+                .skip(page * limit)
+                .exec();
+
+            resolve({
+                status: 'OK',
+                message: 'Hiển thị dữ liệu thành công',
+                data: products,
+                total: totalProduct,
+                pageCurrent: Number(page + 1),
+                totalPage: Math.ceil(totalProduct / limit)
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 
 module.exports = {
     createProduct,
@@ -201,5 +224,6 @@ module.exports = {
     deleteProduct,
     getAllProduct,
     deleteManyProduct,
-    getAllType
+    getAllType,
+    getAllProductsByCategoryIds
 }

@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema(
         publishYear: { type: Number },//Năm xuất bản
         episode: { type: String },//Tập
         images: { type: [String], required: true },
-        type: { type: String, required: true }, // thể loại
+        categoryIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],//Thể loại
         price: { type: Number, required: true },//giá
         countInStock: { type: Number, required: true }, // số lượng kho
         averageRating: { type: Number, default: 0 }, // Đánh giá trung bình sao
