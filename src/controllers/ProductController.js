@@ -2,8 +2,8 @@ const ProductService = require('../services/ProductService')
 
 const createProduct = async (req, res) => {
     try {
-        const { productCode, name, author, publish, publishYear, episode, images, countInStock, price, description, discount } = req.body
-        if (!productCode || !name || !author || !publish || !publishYear || !images || !countInStock || !price || !discount) {
+        const { productCode, name, author, publishId, publishYear, episode, images, countInStock, price, description, discount } = req.body
+        if (!productCode || !name || !author || !publishId || !publishYear || !images || !countInStock || !price || !discount) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'Dữ liệu không hợp lệ'
@@ -126,6 +126,7 @@ const getAllProductsByCategoryIds = async (req, res) => {
     }
 }
 
+
 module.exports = {
     createProduct,
     updateProduct,
@@ -134,5 +135,5 @@ module.exports = {
     getAllProduct,
     deleteMany,
     getAllType,
-    getAllProductsByCategoryIds
+    getAllProductsByCategoryIds,
 }

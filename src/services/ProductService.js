@@ -2,7 +2,7 @@ const Product = require("../models/ProductModel")
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const { productCode, name, author, publish, publishYear, episode, images, countInStock, categoryIds, price, description, discount } = newProduct
+        const { productCode, name, author, publishId, publishYear, episode, images, countInStock, categoryIds, price, description, discount } = newProduct
         try {
             const checkProduct = await Product.findOne({
                 productCode: productCode
@@ -16,7 +16,7 @@ const createProduct = (newProduct) => {
             }
             const newProduct = await Product.create({
                 productCode, name, author,
-                publish,
+                publishId,
                 publishYear: Number(publishYear),
                 episode,
                 images, categoryIds, countInStock: Number(countInStock),
@@ -225,5 +225,5 @@ module.exports = {
     getAllProduct,
     deleteManyProduct,
     getAllType,
-    getAllProductsByCategoryIds
+    getAllProductsByCategoryIds,
 }
