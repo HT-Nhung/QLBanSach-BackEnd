@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const categorySchema = new mongoose.Schema({
-    name: { type: String, required: true }, //Tên thể loại
+    name: { type: String, required: true, unique: true }, //Tên thể loại
     description: { type: String },// Mô tả về thể loại
     type: {//Danh mục thể loại
         type: String,

@@ -88,14 +88,14 @@ const getAllOrder = async (req, res) => {
 const updateOrder = async (req, res) => {
     try {
         const orderId = req.params.id
-        const { newStatus } = req.body;
+        const { newStatus, isPaid } = req.body;
         if (!orderId || !newStatus) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'Thiếu id đơn hàng và trạng thái'
             })
         }
-        const response = await OrderService.updateOrderStatus(orderId, newStatus);
+        const response = await OrderService.updateOrderStatus(orderId, newStatus, isPaid);
         return res.status(200).json(response);
     } catch (e) {
         return res.status(500).json({
@@ -122,6 +122,32 @@ const deleteMany = async (req, res) => {
     }
 }
 
+const getRevenueForLast10Days = async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query
+        const data = await OrderService.getRevenueForLast10Days(startDate, endDate)
+        return res.status(200).json(data)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
+const getTopSellingProducts = async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query
+        const data = await OrderService.getTopSellingProducts(startDate, endDate)
+        return res.status(200).json(data)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
+
+
 module.exports = {
     createOrder,
     getDetailsOrder,
@@ -129,5 +155,7 @@ module.exports = {
     cancelOrderDetails,
     getAllOrder,
     updateOrder,
-    deleteMany
+    deleteMany,
+    getRevenueForLast10Days,
+    getTopSellingProducts
 }
