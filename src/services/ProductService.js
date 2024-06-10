@@ -132,7 +132,9 @@ const getAllProduct = (limit, page, sort, filter) => { //limit(sản phẩm củ
             let allProduct = []
             if (filter) {
                 const label = filter[0]
-                const allObjectFilter = await Product.find({ [label]: { '$regex': filter[1] } }).limit(limit).skip(page * limit)
+                const searchValue = filter[1];
+                const regexFilter = { [label]: { '$regex': searchValue, '$options': 'i' } };
+                const allObjectFilter = await Product.find(regexFilter).limit(limit).skip(page * limit)
                 resolve({
                     status: 'OK',
                     message: 'Hiển thị dữ liệu thành công',
