@@ -4,6 +4,14 @@ const publisherService = (newPublisher) => {
     return new Promise(async (resolve, reject) => {
         const { name, address, phone, email } = newPublisher
         try {
+            // Kiểm tra xem tên đã tồn tại chưa
+            const existing = await Publisher.findOne({ where: { name } });
+            if (existing) {
+                return resolve({
+                    status: '1',
+                    message: 'Tên nhà xuất bản đã tồn tại'
+                });
+            }
             const newPublisher = await Publisher.create({
                 name, address, phone, email
             })

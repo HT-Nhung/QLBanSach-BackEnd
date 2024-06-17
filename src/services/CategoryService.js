@@ -4,6 +4,14 @@ const categoryService = (newCategory) => {
     return new Promise(async (resolve, reject) => {
         const { name, description, type } = newCategory
         try {
+            // Kiểm tra xem tên đã tồn tại chưa
+            const existingCategory = await Category.findOne({ where: { name } });
+            if (existingCategory) {
+                return resolve({
+                    status: '1',
+                    message: 'Tên thể loại đã tồn tại'
+                });
+            }
             const newCategory = await Category.create({
                 name, description, type
             })
